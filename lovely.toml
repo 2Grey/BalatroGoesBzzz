@@ -1,0 +1,142 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[vars]
+intiface_host = "127.0.0.1" # May need to change this if you're running Balatro and Intiface Central on different machines
+intiface_port = "12345" # May need to change this if you're not using the default port for Intiface
+scoring_strength = "0.50" # Fixed chips/multiplier scoring vibration
+flame_strength = "1.00" # Full strength while the score triggers flames
+card_pulse_strength = "0.15" # Card placement pulse, 0..1
+card_pulse_duration = "0.08" # Card placement pulse duration in seconds
+zero_threshold = "0.03" # Intensity values below the threshold will just be set to zero
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "update_canvas_juice(dt)"
+position = "after"
+payload = "update_vibrator()"
+
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.copy]
+target = "game.lua"
+position = "append"
+sources = [
+    "vibrator.lua"
+]
+
+# Buttlatro-style feedback at both scoring sound sites in this game version.
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "play_sound(sound, 0.8+percent*0.2, volume)"
+position = "after"
+payload = """
+if sound == 'chips1' or sound == 'multhit1' or sound == 'multhit2' then
+    balatrobuzz_scoring_vibrate(percent)
+end
+"""
+match_indent = true
+times = 2
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not next(args) then return end"
+position = "before"
+payload = "balatrobuzz_scoring_vibrate(0)"
+match_indent = true
+times = 1
+
+# Run inside the scheduled draw event, after a card has actually moved.
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if not mute and drawn then"
+position = "before"
+payload = """
+if drawn and from == G.hand and to == G.play then
+    balatrobuzz_card_pulse()
+end
+"""
+match_indent = true
+times = 1
+
+# Consume F6 before Balatro's normal keyboard handling.
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "function love.keypressed(key)"
+position = "after"
+payload = "if key == 'f6' and balatrobuzz_toggle_menu and balatrobuzz_toggle_menu() then return end"
+match_indent = true
+times = 1
+
+# Touch-accessible entry in the game's options/pause menu.
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "settings,"
+position = "after"
+payload = "UIBox_button({button = 'balatrobuzz_open', label = {'BalatroBuzz'}, minw = 5, colour = G.C.BLUE}),"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "inc_career_stat('c_cards_discarded', highlighted_count)"
+position = "after"
+payload = "if not hook then balatrobuzz_event('discard') end"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "inc_career_stat('c_shop_dollars_spent', c1.cost)"
+position = "after"
+payload = "balatrobuzz_event('purchase')"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "inc_career_stat('c_vouchers_bought', 1)"
+position = "after"
+payload = "if G.STATE == G.STATES.SHOP then balatrobuzz_event('purchase') end"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "self.opening = true"
+position = "after"
+payload = "balatrobuzz_event('booster')"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if game_over then"
+position = "before"
+payload = "balatrobuzz_event('blind', game_over and 'loss' or 'win')"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false"
+position = "after"
+payload = "balatrobuzz_event('blind', 'loss')"
+match_indent = true
+times = 1
