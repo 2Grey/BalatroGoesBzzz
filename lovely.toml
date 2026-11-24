@@ -96,6 +96,37 @@ payload = "if not hook then balatrogoesbzzz_event('discard') end"
 match_indent = true
 times = 1
 
+# An overlay control may still be referenced after its child has been removed.
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "function G.FUNCS.toggle(e)"
+position = "after"
+payload = """
+  local indicator = e and e.children and e.children[1]
+  if not (indicator and indicator.config and indicator.config.object) then return end
+"""
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "function G.FUNCS.slider(e)"
+position = "after"
+payload = "if not (e and e.children and e.children[1]) then return end"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "function G.FUNCS.slider_descreet(e, per)"
+position = "after"
+payload = "if not (e and e.children and e.children[1]) then return end"
+match_indent = true
+times = 1
+
 [[patches]]
 [patches.pattern]
 target = "functions/button_callbacks.lua"

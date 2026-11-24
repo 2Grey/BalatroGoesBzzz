@@ -95,8 +95,9 @@ local function report_thread_failure(manager)
 end
 
 local function receive_devices(manager, message)
+    local previous = manager.devices or {}
     local old, counts, devices = {}, {}, {}
-    for _, device in ipairs(manager.devices or {}) do old[device.index] = device end
+    for _, device in ipairs(previous) do old[device.index] = device end
     for _, device in ipairs(message.devices or {}) do counts[device.name] = (counts[device.name] or 0) + 1 end
     local cfg = settings()
     manager.ambiguous_names = manager.ambiguous_names or {}
@@ -108,7 +109,7 @@ local function receive_devices(manager, message)
     end
     for _, info in ipairs(message.devices or {}) do
         local device = old[info.index]
-        if not device or device.generation ~= info.generation or device.name ~= info.name then
+        if not device or device.generation ~= info.generation or device.name ~= info.name or device.unnamed ~= info.unnamed then
             device = {index=info.index, name=info.name, unnamed=info.unnamed, generation=info.generation,
                 selected=false, intensity=not manager.ambiguous_names[info.name] and cfg.device_intensities[info.name]
                     or cfg.device_default_intensity}
@@ -119,9 +120,16 @@ local function receive_devices(manager, message)
         devices[#devices+1] = device
     end
     table.sort(devices, function(a,b) return a.index < b.index end)
+    local changed = #devices ~= #previous or manager.connection ~= message.connection or
+        manager.connection_detail ~= message.connection_detail
+    if not changed then
+        for i, device in ipairs(devices) do
+            if device ~= previous[i] then changed = true; break end
+        end
+    end
     manager.devices, manager.connection = devices, message.connection
     manager.connection_detail = message.connection_detail
-    manager.devices_dirty = true
+    manager.devices_dirty = manager.devices_dirty or changed
 end
 
 local function output_devices(manager, strength, cfg)
@@ -339,7 +347,11 @@ function update_vibrator()
         elseif type(out) == 'string' then print(out) end
         out = manager.out_channel:pop()
     end
-    if manager.devices_dirty then rebuild_menu() end
+    -- Allow the controller to finish a click, touch or drag before replacing the overlay.
+    local controller = G.CONTROLLER
+    local pointer_active = controller and (controller.is_cursor_down or controller.L_cursor_queue or
+        (controller.dragging and controller.dragging.target))
+    if manager.devices_dirty and not pointer_active then rebuild_menu() end
     apply_vibration(manager)
     store.update()
 end
