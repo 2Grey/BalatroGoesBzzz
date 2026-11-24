@@ -1,9 +1,9 @@
 require 'love'
 require 'love.filesystem'
 require 'love.timer'
-local json = require('Mods.BalatroBuzz.json')
-local websocket = require('Mods.BalatroBuzz.websocket')
-local Router = require('Mods.BalatroBuzz.deviceRouter')
+local json = require('Mods.BalatroGoesBzzz.json')
+local websocket = require('Mods.BalatroGoesBzzz.websocket')
+local Router = require('Mods.BalatroGoesBzzz.deviceRouter')
 local input = love.thread.getChannel('vibration_channel_in')
 local output = love.thread.getChannel('vibration_channel_out')
 local host, port = input:demand(), input:demand()
@@ -34,7 +34,7 @@ local function connect()
     disconnect('connecting')
     client = websocket.new(host, port, '/')
     function client:onopen()
-        send('RequestServerInfo', {ClientName='BalatroBuzz', MessageVersion=2})
+        send('RequestServerInfo', {ClientName='BalatroGoesBzzz', MessageVersion=2})
     end
     function client:onmessage(data)
         local ok, messages = pcall(json.decode, data)
@@ -51,7 +51,7 @@ local function connect()
                 elseif kind == 'DeviceAdded' then router:add(body)
                 elseif kind == 'DeviceRemoved' then router:remove(body.DeviceIndex)
                 elseif kind == 'Error' then
-                    output:push('[BalatroBuzz] Intiface: '..tostring(body.ErrorMessage))
+                    output:push('[BalatroGoesBzzz] Intiface: '..tostring(body.ErrorMessage))
                 end
             end
         end

@@ -1,11 +1,11 @@
--- BalatroBuzz: en-us
+-- BalatroGoesBzzz: en-us
 return {
     autosave = "Changes are saved automatically",
     saved = "Settings saved",
     save_error = "Save failed — see log",
     enable_device = "Enable the device and vibration",
     test = "Test",
-    title = "BalatroBuzz — Vibration",
+    title = "BalatroGoesBzzz — Vibration",
     enabled = "Vibration enabled",
     tab_cards = "Cards & score",
     tab_events = "Shop & round",

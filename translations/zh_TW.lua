@@ -1,11 +1,11 @@
--- BalatroBuzz: zh_TW
+-- BalatroGoesBzzz: zh_TW
 return {
     autosave = "變更會自動儲存",
     saved = "設定已儲存",
     save_error = "儲存失敗，請查看日誌",
     enable_device = "請啟用裝置和震動",
     test = "測試",
-    title = "BalatroBuzz — 震動",
+    title = "BalatroGoesBzzz — 震動",
     enabled = "啟用震動",
     tab_cards = "卡牌與分數",
     tab_events = "商店與回合",

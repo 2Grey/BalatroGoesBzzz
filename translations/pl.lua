@@ -1,11 +1,11 @@
--- BalatroBuzz: pl
+-- BalatroGoesBzzz: pl
 return {
     autosave = "Zmiany są zapisywane automatycznie",
     saved = "Ustawienia zapisane",
     save_error = "Błąd zapisu — sprawdź dziennik",
     enable_device = "Włącz urządzenie i wibracje",
     test = "Test",
-    title = "BalatroBuzz — Wibracje",
+    title = "BalatroGoesBzzz — Wibracje",
     enabled = "Wibracje włączone",
     tab_cards = "Karty i wynik",
     tab_events = "Sklep i runda",

@@ -1,22 +1,22 @@
 -- Standalone localization: follows Balatro without requiring Steamodded.
-local Localization = {}
+local Translation = {}
 local supported = {
     ['en-us']=true, ru=true, de=true, fr=true, it=true, nl=true, pl=true,
     pt_BR=true, es_ES=true, es_419=true, id=true, ja=true, ko=true,
     zh_CN=true, zh_TW=true,
 }
-local english = require('Mods.BalatroBuzz.localization.en-us')
+local english = require('Mods.BalatroGoesBzzz.translations.en-us')
 local cache = {['en-us']=english}
 
-function Localization.language()
+function Translation.language()
     local language = G and G.SETTINGS and G.SETTINGS.language
     return supported[language] and language or 'en-us'
 end
 
-function Localization.get(key, values)
-    local language = Localization.language()
+function Translation.get(key, values)
+    local language = Translation.language()
     if not cache[language] then
-        cache[language] = require('Mods.BalatroBuzz.localization.'..language)
+        cache[language] = require('Mods.BalatroGoesBzzz.translations.'..language)
     end
     local text = cache[language][key] or english[key] or key
     -- Function replacements keep '%' in server error details literal.
@@ -26,4 +26,4 @@ function Localization.get(key, values)
     end))
 end
 
-return Localization
+return Translation

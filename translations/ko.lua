@@ -1,11 +1,11 @@
--- BalatroBuzz: ko
+-- BalatroGoesBzzz: ko
 return {
     autosave = "변경 사항은 자동으로 저장됩니다",
     saved = "설정을 저장했습니다",
     save_error = "저장 실패 — 로그를 확인하세요",
     enable_device = "장치와 진동을 활성화하세요",
     test = "테스트",
-    title = "BalatroBuzz — 진동",
+    title = "BalatroGoesBzzz — 진동",
     enabled = "진동 활성화",
     tab_cards = "카드 및 점수",
     tab_events = "상점 및 라운드",

@@ -1,11 +1,11 @@
--- BalatroBuzz: nl
+-- BalatroGoesBzzz: nl
 return {
     autosave = "Wijzigingen worden automatisch opgeslagen",
     saved = "Instellingen opgeslagen",
     save_error = "Opslaan mislukt — zie logboek",
     enable_device = "Schakel het apparaat en trillingen in",
     test = "Test",
-    title = "BalatroBuzz — Trillingen",
+    title = "BalatroGoesBzzz — Trillingen",
     enabled = "Trillingen ingeschakeld",
     tab_cards = "Kaarten en score",
     tab_events = "Winkel en ronde",

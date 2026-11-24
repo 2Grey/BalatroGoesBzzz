@@ -1,11 +1,11 @@
--- BalatroBuzz: ru
+-- BalatroGoesBzzz: ru
 return {
     autosave = "Изменения сохраняются автоматически",
     saved = "Настройки сохранены",
     save_error = "Ошибка сохранения — см. журнал",
     enable_device = "Включите устройство и общую вибрацию",
     test = "Тест",
-    title = "BalatroBuzz — вибрация",
+    title = "BalatroGoesBzzz — вибрация",
     enabled = "Вибрация включена",
     tab_cards = "Карты и счёт",
     tab_events = "Магазин и раунд",

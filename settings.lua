@@ -1,9 +1,9 @@
 -- Owns validation, migration, persistence and delayed saves.
-local json = require('Mods.BalatroBuzz.json')
+local json = require('Mods.BalatroGoesBzzz.json')
 local Settings = {}
 
 function Settings.new(defaults, set_status)
-    local settings_path = 'Mods/BalatroBuzz/settings.json'
+    local settings_path = 'Mods/BalatroGoesBzzz/settings.json'
     local config, saved_signature, changed_at, pending_signature
     local keys = {}
     for key in pairs(defaults) do keys[#keys+1] = key end
@@ -57,7 +57,7 @@ function Settings.new(defaults, set_status)
             local ok, content = pcall(love.filesystem.read, settings_path)
             if ok and content then
                 local decoded, value = pcall(json.decode, content)
-                if decoded then data = value else print('[BalatroBuzz] Invalid settings; using defaults') end
+                if decoded then data = value else print('[BalatroGoesBzzz] Invalid settings; using defaults') end
             end
             config = sanitize(data)
             saved_signature = signature(config)
@@ -77,7 +77,7 @@ function Settings.new(defaults, set_status)
             return true
         end
         set_status('save_error')
-        print('[BalatroBuzz] Could not save settings: '..tostring(reason or result))
+        print('[BalatroGoesBzzz] Could not save settings: '..tostring(reason or result))
         changed_at = love.timer.getTime() + 5 -- Retry without flooding the log every frame.
         return false
     end

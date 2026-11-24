@@ -38,7 +38,7 @@ pattern = "play_sound(sound, 0.8+percent*0.2, volume)"
 position = "after"
 payload = """
 if sound == 'chips1' or sound == 'multhit1' or sound == 'multhit2' then
-    balatrobuzz_scoring_vibrate(percent)
+    balatrogoesbzzz_scoring_vibrate(percent)
 end
 """
 match_indent = true
@@ -49,7 +49,7 @@ times = 2
 target = "functions/common_events.lua"
 pattern = "if not next(args) then return end"
 position = "before"
-payload = "balatrobuzz_scoring_vibrate(0)"
+payload = "balatrogoesbzzz_scoring_vibrate(0)"
 match_indent = true
 times = 1
 
@@ -61,7 +61,7 @@ pattern = "if not mute and drawn then"
 position = "before"
 payload = """
 if drawn and from == G.hand and to == G.play then
-    balatrobuzz_card_pulse()
+    balatrogoesbzzz_card_pulse()
 end
 """
 match_indent = true
@@ -73,7 +73,7 @@ times = 1
 target = "main.lua"
 pattern = "function love.keypressed(key)"
 position = "after"
-payload = "if key == 'f6' and balatrobuzz_toggle_menu and balatrobuzz_toggle_menu() then return end"
+payload = "if key == 'f6' and balatrogoesbzzz_toggle_menu and balatrogoesbzzz_toggle_menu() then return end"
 match_indent = true
 times = 1
 
@@ -83,7 +83,7 @@ times = 1
 target = "functions/UI_definitions.lua"
 pattern = "settings,"
 position = "after"
-payload = "UIBox_button({button = 'balatrobuzz_open', label = {'BalatroBuzz'}, minw = 5, colour = G.C.BLUE}),"
+payload = "UIBox_button({button = 'balatrogoesbzzz_open', label = {'BalatroGoesBzzz'}, minw = 5, colour = G.C.BLUE}),"
 match_indent = true
 times = 1
 
@@ -92,7 +92,7 @@ times = 1
 target = "functions/state_events.lua"
 pattern = "inc_career_stat('c_cards_discarded', highlighted_count)"
 position = "after"
-payload = "if not hook then balatrobuzz_event('discard') end"
+payload = "if not hook then balatrogoesbzzz_event('discard') end"
 match_indent = true
 times = 1
 
@@ -101,7 +101,7 @@ times = 1
 target = "functions/button_callbacks.lua"
 pattern = "inc_career_stat('c_shop_dollars_spent', c1.cost)"
 position = "after"
-payload = "balatrobuzz_event('purchase')"
+payload = "balatrogoesbzzz_event('purchase')"
 match_indent = true
 times = 1
 
@@ -110,7 +110,7 @@ times = 1
 target = "card.lua"
 pattern = "inc_career_stat('c_vouchers_bought', 1)"
 position = "after"
-payload = "if G.STATE == G.STATES.SHOP then balatrobuzz_event('purchase') end"
+payload = "if G.STATE == G.STATES.SHOP then balatrogoesbzzz_event('purchase') end"
 match_indent = true
 times = 1
 
@@ -119,7 +119,7 @@ times = 1
 target = "card.lua"
 pattern = "self.opening = true"
 position = "after"
-payload = "balatrobuzz_event('booster')"
+payload = "balatrogoesbzzz_event('booster')"
 match_indent = true
 times = 1
 
@@ -128,7 +128,7 @@ times = 1
 target = "functions/state_events.lua"
 pattern = "if game_over then"
 position = "before"
-payload = "balatrobuzz_event('blind', game_over and 'loss' or 'win')"
+payload = "balatrogoesbzzz_event('blind', game_over and 'loss' or 'win')"
 match_indent = true
 times = 1
 
@@ -137,6 +137,6 @@ times = 1
 target = "functions/state_events.lua"
 pattern = "G.STATE = G.STATES.GAME_OVER; G.STATE_COMPLETE = false"
 position = "after"
-payload = "balatrobuzz_event('blind', 'loss')"
+payload = "balatrogoesbzzz_event('blind', 'loss')"
 match_indent = true
 times = 1

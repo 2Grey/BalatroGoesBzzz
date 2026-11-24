@@ -1,9 +1,11 @@
--- BalatroBuzz: event feedback and touch-accessible settings.
-local Settings = require('Mods.BalatroBuzz.settings')
-local Feedback = require('Mods.BalatroBuzz.feedback')
-local Menu = require('Mods.BalatroBuzz.menu')
-local Localization = require('Mods.BalatroBuzz.localization')
-local tr = Localization.get
+-- BalatroGoesBzzz: event feedback and touch-accessible settings.
+local Settings = require('Mods.BalatroGoesBzzz.settings')
+local Feedback = require('Mods.BalatroGoesBzzz.feedback')
+local Menu = require('Mods.BalatroGoesBzzz.menu')
+local tr = require('Mods.BalatroGoesBzzz.translation').get
+local version = require('Mods.BalatroGoesBzzz.version')
+
+print('[BalatroGoesBzzz] Loaded v'..version)
 local defaults = {
     enabled = true,
     device_default_intensity = 100,
@@ -33,7 +35,7 @@ local settings, save_settings = store.get, store.save
 
 local function ensure_vibration_manager()
     if not G.VIBRATION_MANAGER then
-        local thread = love.thread.newThread('/Mods/BalatroBuzz/vibrationThread.lua')
+        local thread = love.thread.newThread('/Mods/BalatroGoesBzzz/vibrationThread.lua')
         G.VIBRATION_MANAGER = {thread = thread,
             in_channel = love.thread.getChannel('vibration_channel_in'),
             out_channel = love.thread.getChannel('vibration_channel_out')}
@@ -101,7 +103,7 @@ local function apply_vibration(manager)
     manager.strength = strength
 end
 
-function balatrobuzz_scoring_vibrate(intensity)
+function balatrogoesbzzz_scoring_vibrate(intensity)
     local manager, cfg = ensure_vibration_manager(), settings()
     if cfg.enabled and cfg.scoring_enabled and (tonumber(intensity) or 0) > 0 then
         manager.scoring_until = love.timer.getTime() + 2
@@ -111,7 +113,7 @@ function balatrobuzz_scoring_vibrate(intensity)
     apply_vibration(manager)
 end
 
-function balatrobuzz_card_pulse()
+function balatrogoesbzzz_card_pulse()
     local manager, cfg = ensure_vibration_manager(), settings()
     if cfg.enabled and cfg.card_enabled then
         manager.pulse_until = love.timer.getTime() + cfg.card_duration_ms / 1000
@@ -119,7 +121,7 @@ function balatrobuzz_card_pulse()
     apply_vibration(manager)
 end
 
-function balatrobuzz_event(key, variant)
+function balatrogoesbzzz_event(key, variant)
     if not Feedback.priorities[key] then return end
     local manager, cfg = ensure_vibration_manager(), settings()
     if not cfg.enabled or not cfg[key..'_enabled'] or G.SETTINGS.paused then return end
@@ -135,7 +137,7 @@ end
 
 local function bind_device_test(device)
     local manager = ensure_vibration_manager()
-    local callback = 'balatrobuzz_test_device_'..device.index
+    local callback = 'balatrogoesbzzz_test_device_'..device.index
     local generation = device.generation
     G.FUNCS[callback] = function()
         if not menu or G.OVERLAY_MENU ~= menu then return end
@@ -174,7 +176,7 @@ end
 rebuild_menu = function()
     local manager = ensure_vibration_manager()
     if menu and G.OVERLAY_MENU == menu and menu_page == 3 then
-        G.FUNCS.balatrobuzz_stop_test()
+        G.FUNCS.balatrogoesbzzz_stop_test()
         G.FUNCS.exit_overlay_menu()
         open_menu()
     end
@@ -182,7 +184,7 @@ rebuild_menu = function()
 end
 
 local function register_callbacks()
-    if G.FUNCS.balatrobuzz_close then return end
+    if G.FUNCS.balatrogoesbzzz_close then return end
     local exit_overlay = G.FUNCS.exit_overlay_menu
     G.FUNCS.exit_overlay_menu = function(...)
         if menu and G.OVERLAY_MENU == menu then
@@ -193,19 +195,19 @@ local function register_callbacks()
         end
         return exit_overlay(...)
     end
-    G.FUNCS.balatrobuzz_open = function()
+    G.FUNCS.balatrogoesbzzz_open = function()
         -- Leave the options overlay first to balance the native cursor context.
         G.FUNCS.exit_overlay_menu()
         return_to_options = true
         open_menu()
     end
-    G.FUNCS.balatrobuzz_close = function()
+    G.FUNCS.balatrogoesbzzz_close = function()
         local back_to_options = return_to_options
         return_to_options = false
         G.FUNCS.exit_overlay_menu()
         if back_to_options then G.FUNCS.options() end
     end
-    G.FUNCS.balatrobuzz_stop_test = function()
+    G.FUNCS.balatrogoesbzzz_stop_test = function()
         test.event, test.until_time = nil, nil
         apply_vibration(ensure_vibration_manager())
     end
@@ -213,7 +215,7 @@ local function register_callbacks()
         {'purchase'}, {'booster'}, {'blind'}, {'blind', 'blind_loss'}}) do
         local key = entry[1]
         local event_key, variant = key, entry[2]
-        G.FUNCS['balatrobuzz_test_'..(variant or key)] = function()
+        G.FUNCS['balatrogoesbzzz_test_'..(variant or key)] = function()
             if not menu or G.OVERLAY_MENU ~= menu then return end
             if not settings().enabled or not settings()[event_key..'_enabled'] then
                 set_status('enable_event')
@@ -224,28 +226,28 @@ local function register_callbacks()
         end
     end
     local function change_page(page)
-        G.FUNCS.balatrobuzz_stop_test()
+        G.FUNCS.balatrogoesbzzz_stop_test()
         G.FUNCS.exit_overlay_menu()
         menu_page = page
         open_menu()
     end
-    G.FUNCS.balatrobuzz_page_cards = function() change_page(1) end
-    G.FUNCS.balatrobuzz_page_events = function() change_page(2) end
-    G.FUNCS.balatrobuzz_page_devices = function() change_page(3) end
-    G.FUNCS.balatrobuzz_devices_prev = function()
+    G.FUNCS.balatrogoesbzzz_page_cards = function() change_page(1) end
+    G.FUNCS.balatrogoesbzzz_page_events = function() change_page(2) end
+    G.FUNCS.balatrogoesbzzz_page_devices = function() change_page(3) end
+    G.FUNCS.balatrogoesbzzz_devices_prev = function()
         device_page = math.max(1, device_page-1)
         rebuild_menu()
     end
-    G.FUNCS.balatrobuzz_devices_next = function()
+    G.FUNCS.balatrogoesbzzz_devices_next = function()
         device_page = device_page+1
         rebuild_menu()
     end
-    G.FUNCS.balatrobuzz_devices_scan = function()
+    G.FUNCS.balatrogoesbzzz_devices_scan = function()
         ensure_vibration_manager().in_channel:push({type='scan'})
         set_status('scan_requested')
     end
-    G.FUNCS.balatrobuzz_reset = function()
-        G.FUNCS.balatrobuzz_stop_test()
+    G.FUNCS.balatrogoesbzzz_reset = function()
+        G.FUNCS.balatrogoesbzzz_stop_test()
         local cfg = store.reset()
         for _, device in ipairs(ensure_vibration_manager().devices or {}) do
             device.intensity = cfg.device_default_intensity
@@ -257,12 +259,12 @@ local function register_callbacks()
     end
 end
 
-function balatrobuzz_toggle_menu()
+function balatrogoesbzzz_toggle_menu()
     if not G or not G.FUNCS or not G.FUNCS.exit_overlay_menu or not G.CONTROLLER or
         not G.ROOM or not G.SETTINGS or G.CONTROLLER.text_input_hook then return false end
     register_callbacks()
     if menu and G.OVERLAY_MENU == menu then
-        G.FUNCS.balatrobuzz_close()
+        G.FUNCS.balatrogoesbzzz_close()
         return true
     end
     if G.OVERLAY_MENU or G.SETTINGS.paused then return true end

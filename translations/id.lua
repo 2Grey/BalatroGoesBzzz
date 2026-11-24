@@ -1,11 +1,11 @@
--- BalatroBuzz: id
+-- BalatroGoesBzzz: id
 return {
     autosave = "Perubahan disimpan secara otomatis",
     saved = "Pengaturan disimpan",
     save_error = "Gagal menyimpan — lihat log",
     enable_device = "Aktifkan perangkat dan getaran",
     test = "Tes",
-    title = "BalatroBuzz — Getaran",
+    title = "BalatroGoesBzzz — Getaran",
     enabled = "Getaran aktif",
     tab_cards = "Kartu & skor",
     tab_events = "Toko & ronde",

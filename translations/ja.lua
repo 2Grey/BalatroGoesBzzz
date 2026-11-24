@@ -1,11 +1,11 @@
--- BalatroBuzz: ja
+-- BalatroGoesBzzz: ja
 return {
     autosave = "変更は自動的に保存されます",
     saved = "設定を保存しました",
     save_error = "保存に失敗しました。ログを確認してください",
     enable_device = "デバイスと振動を有効にしてください",
     test = "テスト",
-    title = "BalatroBuzz — 振動",
+    title = "BalatroGoesBzzz — 振動",
     enabled = "振動を有効にする",
     tab_cards = "カードとスコア",
     tab_events = "ショップとラウンド",

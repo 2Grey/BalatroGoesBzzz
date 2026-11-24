@@ -1,13 +1,13 @@
--- BalatroBuzz: es_419
+-- BalatroGoesBzzz: es_ES
 return {
     autosave = "Los cambios se guardan automáticamente",
-    saved = "Configuración guardada",
+    saved = "Ajustes guardados",
     save_error = "Error al guardar — consulta el registro",
     enable_device = "Activa el dispositivo y la vibración",
     test = "Prueba",
-    title = "BalatroBuzz — Vibración",
+    title = "BalatroGoesBzzz — Vibración",
     enabled = "Vibración activada",
-    tab_cards = "Cartas y puntaje",
+    tab_cards = "Cartas y puntos",
     tab_events = "Tienda y ronda",
     tab_devices = "Dispositivos",
     device_strength = "Intensidad del dispositivo, % (10–100)",
@@ -22,7 +22,7 @@ return {
     card_duration = "Pulso de carta, ms",
     discard = "Descartar cartas",
     purchase = "Compra en tienda",
-    booster = "Abrir un paquete",
+    booster = "Abrir un sobre",
     blind = "Resultado de la ciega",
     test_loss = "Probar derrota",
     done = "Listo",
