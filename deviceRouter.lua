@@ -66,8 +66,9 @@ function Router:vibrate(device, value)
     if device.last_strength == value then return end
     local speeds = {}
     for index=0, device.features-1 do speeds[#speeds+1] = {Index=index, Speed=value} end
-    self.send('VibrateCmd', {DeviceIndex=device.index, Speeds=speeds})
-    device.last_strength = value
+    if self.send('VibrateCmd', {DeviceIndex=device.index, Speeds=speeds}) then
+        device.last_strength = value
+    end
 end
 
 function Router:output(targets)

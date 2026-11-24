@@ -72,12 +72,13 @@ function Settings.new(defaults, set_status)
         end)
         if ok and result then
             saved_signature = signature(config)
-            changed_at = nil
+            pending_signature, changed_at = nil, nil
             set_status('saved')
             return true
         end
         set_status('save_error')
         print('[BalatroGoesBzzz] Could not save settings: '..tostring(reason or result))
+        pending_signature = signature(config)
         changed_at = love.timer.getTime() + 5 -- Retry without flooding the log every frame.
         return false
     end
@@ -85,7 +86,10 @@ function Settings.new(defaults, set_status)
     local function update()
         local cfg, now = settings(), love.timer.getTime()
         local current = signature(cfg)
-        if current ~= saved_signature then
+        if current == saved_signature then
+            if pending_signature then set_status('saved') end
+            pending_signature, changed_at = nil, nil
+        else
             if current ~= pending_signature then
                 pending_signature, changed_at = current, now
                 set_status('saving')

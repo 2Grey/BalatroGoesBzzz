@@ -53,8 +53,10 @@ function Feedback.strength(manager, cfg, now, game, test, menu_active)
         manager.scoring_until, manager.pulse_until, manager.buzz_event = nil, nil, nil
         -- Explicit Test is the only feedback allowed while this settings window is open.
         if menu_active and test.event and now < test.until_time then
-            local value = pattern_value(test.variant or test.event, now - (test.until_time - 1))
-            if not patterns[test.variant or test.event] then value = 1 end
+            local elapsed = now - (test.until_time - 1)
+            local key = test.variant or test.event
+            local value = patterns[key] and (pattern_value(key, elapsed) or 0) or 1
+            if key == 'card' and elapsed >= cfg.card_duration_ms / 1000 then value = 0 end
             if test.event == 'device' then
                 strength = 1
             elseif cfg[test.event..'_enabled'] then

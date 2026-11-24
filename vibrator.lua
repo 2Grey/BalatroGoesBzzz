@@ -33,17 +33,65 @@ end
 local store = Settings.new(defaults, set_status)
 local settings, save_settings = store.get, store.save
 
+local worker_threads = setmetatable({}, {__mode='k'})
+
+local function install_thread_error_handler()
+    local previous = love.threaderror
+    love.threaderror = function(thread, detail)
+        if worker_threads[thread] then
+            local manager = G.VIBRATION_MANAGER
+            if manager and manager.thread == thread then manager.thread_error = tostring(detail) end
+        elseif previous then
+            return previous(thread, detail)
+        else
+            error(detail, 0)
+        end
+    end
+end
+
+local function start_vibration_thread(manager)
+    manager.in_channel:clear()
+    manager.out_channel:clear()
+    manager.output_signature = nil
+    manager.thread_error, manager.worker_stopped = nil, nil
+    manager.thread = nil
+    manager.connection, manager.connection_detail = 'connecting', nil
+    manager.devices_dirty = true
+
+    local ok, result = pcall(function()
+        local thread = love.thread.newThread('/Mods/BalatroGoesBzzz/vibrationThread.lua')
+        worker_threads[thread] = true
+        thread:start('{{lovely:intiface_host}}', {{lovely:intiface_port}})
+        return thread
+    end)
+    if ok then manager.thread = result
+    else manager.thread_error = tostring(result) end
+end
+
 local function ensure_vibration_manager()
     if not G.VIBRATION_MANAGER then
-        local thread = love.thread.newThread('/Mods/BalatroGoesBzzz/vibrationThread.lua')
-        G.VIBRATION_MANAGER = {thread = thread,
+        local manager = {
             in_channel = love.thread.getChannel('vibration_channel_in'),
-            out_channel = love.thread.getChannel('vibration_channel_out')}
-        thread:start()
-        G.VIBRATION_MANAGER.in_channel:push('{{lovely:intiface_host}}')
-        G.VIBRATION_MANAGER.in_channel:push({{lovely:intiface_port}})
+            out_channel = love.thread.getChannel('vibration_channel_out'),
+        }
+        G.VIBRATION_MANAGER = manager
+        install_thread_error_handler()
+        start_vibration_thread(manager)
     end
     return G.VIBRATION_MANAGER
+end
+
+local function report_thread_failure(manager)
+    local thread = manager.thread
+    if thread and thread:isRunning() then return end
+    if manager.worker_stopped then return end
+    local detail = manager.thread_error or (thread and thread:getError()) or 'Intiface worker stopped'
+    manager.worker_stopped = true
+    manager.connection, manager.connection_detail = 'connection_error', detail
+    manager.devices, manager.devices_dirty = {}, true
+    manager.in_channel:clear()
+    manager.out_channel:clear()
+    print('[BalatroGoesBzzz] '..detail)
 end
 
 local function receive_devices(manager, message)
@@ -89,7 +137,7 @@ local function output_devices(manager, strength, cfg)
         end
     end
     local current = table.concat(parts, ':')
-    if current ~= manager.output_signature then
+    if not manager.worker_stopped and current ~= manager.output_signature then
         manager.in_channel:push({type='output', targets=targets})
         manager.output_signature = current
     end
@@ -243,7 +291,10 @@ local function register_callbacks()
         rebuild_menu()
     end
     G.FUNCS.balatrogoesbzzz_devices_scan = function()
-        ensure_vibration_manager().in_channel:push({type='scan'})
+        local manager = ensure_vibration_manager()
+        report_thread_failure(manager)
+        if manager.worker_stopped then start_vibration_thread(manager)
+        else manager.in_channel:push({type='scan'}) end
         set_status('scan_requested')
     end
     G.FUNCS.balatrogoesbzzz_reset = function()
@@ -280,6 +331,7 @@ function update_vibrator()
         test.event, test.until_time, menu = nil, nil, nil
         save_settings()
     end
+    report_thread_failure(manager)
     local out = manager.out_channel:pop()
     while out do
         if type(out) == 'table' and out.type == 'devices' then
