@@ -2,7 +2,7 @@
 
 # BalatroGoesBzzz
 
-**Version 1.0.0**
+**Version 1.1.0**
 
 BalatroGoesBzzz integrates the Buttplug SDK with Balatro through Intiface Central. It turns game events such as playing or discarding cards, scoring, shop purchases, opening boosters, and blind results into vibration feedback.
 
