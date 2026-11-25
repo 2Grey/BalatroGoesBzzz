@@ -12,7 +12,7 @@ BalatroGoesBzzz integrates the Buttplug SDK with Balatro through Intiface Centra
 
 ## Installation
 
-1. Install [Lovely Injector](https://github.com/ethangreen-dev/lovely-injector#manual-installation) on desktop or use [Lovely Mobile Maker](https://lmm.shorty.systems/) to prepare a modded Android build from your Steam copy. Steamodded is optional.
+1. Use Lovely 0.8.0 or newer (including in your Android build). Install [Lovely Injector](https://github.com/ethangreen-dev/lovely-injector#manual-installation) on desktop or use [Lovely Mobile Maker](https://lmm.shorty.systems/) to prepare a modded Android build from your Steam copy. Steamodded is optional.
 2. Download or clone this repository. Name the folder **`BalatroGoesBzzz`** and put it in your `Mods` directory. Keep the Lua files and the `translations/` folder together so that `lovely.toml` is directly inside `Mods/BalatroGoesBzzz/`.
 
    | Platform | Mod folder |
@@ -24,7 +24,7 @@ BalatroGoesBzzz integrates the Buttplug SDK with Balatro through Intiface Centra
 3. Install [Intiface Central](https://intiface.com/central/) and [start its engine](https://intiface.com/docs/intiface-central/quickstart/). BalatroGoesBzzz uses Buttplug protocol v2 and connects to `127.0.0.1:12345` by default. If Intiface runs on another device, set `intiface_host` in `lovely.toml` to that device’s IP address. Change `intiface_port` there if your setup uses a different port.
 4. Launch Balatro with Lovely. On macOS, use `run_lovely_macos.sh` from the game directory.
 
-When updating from an earlier release, rename your existing mod folder to `BalatroGoesBzzz` before copying in the new files. Keep your existing `settings.json` and replace the other mod files together. Keep only one copy of the mod in `Mods`.
+When updating from an earlier release, move the old `BalatroBuzz` folder outside `Mods` and install the complete new `BalatroGoesBzzz` folder. Keep your existing `settings.json` and replace the other mod files together. Keep only one copy of the mod in `Mods`.
 
 ## Using the mod in game
 

@@ -12,6 +12,176 @@ card_pulse_strength = "0.15" # Card placement pulse, 0..1
 card_pulse_duration = "0.08" # Card placement pulse duration in seconds
 zero_threshold = "0.03" # Intensity values below the threshold will just be set to zero
 
+# Register modules with Lovely instead of relying on the game filesystem.
+# Keep loading lazy: the worker has its own Lua state and LÖVE initialization.
+[[patches]]
+[patches.module]
+source = "deviceRouter.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.deviceRouter"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "feedback.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.feedback"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "json.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.json"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "menu.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.menu"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "settings.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.settings"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translation.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translation"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "version.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.version"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "vibrationThread.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.vibrationThread"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "websocket.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.websocket"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/de.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.de"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/en-us.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.en-us"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/es_419.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.es_419"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/es_ES.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.es_ES"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/fr.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.fr"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/id.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.id"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/it.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.it"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/ja.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.ja"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/ko.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.ko"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/nl.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.nl"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/pl.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.pl"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/pt_BR.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.pt_BR"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/ru.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.ru"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/zh_CN.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.zh_CN"
+load_now = false
+
+[[patches]]
+[patches.module]
+source = "translations/zh_TW.lua"
+before = "main.lua"
+name = "Mods.BalatroGoesBzzz.translations.zh_TW"
+load_now = false
+
 [[patches]]
 [patches.pattern]
 target = "game.lua"

@@ -68,6 +68,8 @@ function Settings.new(defaults, set_status)
     local function save_settings()
         local data = sanitize(settings())
         local ok, result, reason = pcall(function()
+            local created, reason = love.filesystem.createDirectory('Mods/BalatroGoesBzzz')
+            if not created then return nil, reason end
             return love.filesystem.write(settings_path, json.encode(data))
         end)
         if ok and result then

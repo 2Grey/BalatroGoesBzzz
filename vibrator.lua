@@ -59,7 +59,10 @@ local function start_vibration_thread(manager)
     manager.devices_dirty = true
 
     local ok, result = pcall(function()
-        local thread = love.thread.newThread('/Mods/BalatroGoesBzzz/vibrationThread.lua')
+        local thread = love.thread.newThread([[
+            local host, port = ...
+            require('Mods.BalatroGoesBzzz.vibrationThread')(host, port)
+        ]])
         worker_threads[thread] = true
         thread:start('{{lovely:intiface_host}}', {{lovely:intiface_port}})
         return thread
